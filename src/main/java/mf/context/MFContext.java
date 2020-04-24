@@ -45,7 +45,7 @@ public class MFContext {
             beanNameMap.put(c.getName(), bean);
 
             Class<?>[] interfaces = c.getInterfaces();
-            if (interfaces != null) {
+            if (interfaces.length > 0){
                 for (Class<?> anInterface : interfaces) {
                     if (beanTypeMap.containsKey(anInterface.getName())) {
                         throw new ContextException("multiple class implement same interface");
@@ -66,8 +66,7 @@ public class MFContext {
      */
     public void autoWired() {
         beanNameMap.forEach((k, v) -> {
-            Field[] declaredFields = v.getClass()
-                                      .getDeclaredFields();
+            Field[] declaredFields = v.getClass().getDeclaredFields();
             for (Field declaredField : declaredFields) {
                 declaredField.setAccessible(true);
 
@@ -76,9 +75,8 @@ public class MFContext {
                     continue;
                 }
 
-                String fieldTypeName = declaredField.getType()
-                                                    .getName();
-                Object bean = beanTypeMap.get(fieldTypeName);
+                String fieldTypeName = declaredField.getType().getName();
+                Object bean          = beanTypeMap.get(fieldTypeName);
                 if (bean == null) {
                     throw new AutowiredException("not found bean " + fieldTypeName);
                 }

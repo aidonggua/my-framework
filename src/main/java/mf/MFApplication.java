@@ -25,8 +25,8 @@ public class MFApplication {
             throw new BeanScanException("");
         }
         System.out.println("start to scan beans...");
-        BeanScanner beanScanner  = new BeanScanner();
-        Set<String> classNameSet = null;
+        BeanScanner beanScanner = new BeanScanner();
+        Set<String> classNameSet;
         try {
             classNameSet = beanScanner.scan(beanScan.value());
         } catch (IOException e) {
@@ -49,9 +49,5 @@ public class MFApplication {
 
     public MFContext getMfContext() {
         return mfContext;
-    }
-
-    public void setMfContext(MFContext mfContext) {
-        this.mfContext = mfContext;
     }
 }

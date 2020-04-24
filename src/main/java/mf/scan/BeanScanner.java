@@ -2,7 +2,9 @@ package mf.scan;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Objects;
@@ -43,18 +45,15 @@ public class BeanScanner {
      * @author yehao
      * @date 2020/4/13
      */
-    public void getPathClassName(String path, Set<String> classNameSet, String prefix) {
-        File[] files = new File(path).listFiles(file -> (file.isFile()
-                                                         && file.getName()
-                                                                .endsWith(".class")
-                                                         && !file.getName()
-                                                                 .contains("$"))
-                                                        || file.isDirectory());
+    public void getPathClassName(String path, Set<String> classNameSet, String prefix) throws UnsupportedEncodingException {
+        File[] files = new File(URLDecoder.decode(path, "UTF-8")).listFiles(file -> (file.isFile()
+                && file.getName().endsWith(".class")
+                && !file.getName().contains("$"))
+                || file.isDirectory());
         if (files != null) {
             for (File file : files) {
                 if (file.isFile()) {
-                    classNameSet.add(prefix + "." + file.getName()
-                                                        .split("\\.")[0]);
+                    classNameSet.add(prefix + "." + file.getName().split("\\.")[0]);
                 } else {
                     getPathClassName(path + "/" + file.getName(), classNameSet, prefix + "." + file.getName());
                 }
